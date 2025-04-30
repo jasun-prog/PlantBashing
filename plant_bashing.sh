@@ -1,11 +1,10 @@
 #!/bin/bash
-
-echo "Hello children, this is the best plant game you'll ever see!"
+echo "Hello Im Tom, welcome to PlantGrower 3000!!!"
 
 echo "What is your name?"
 read name
 
-echo "Hello $name. You're one of the best people I could have asked for this task."
+echo "Hello $name. I have entrusted my garden to you"
 sleep 2
 echo "Goodbye. I'll miss you. Goodbye :("
 
@@ -47,6 +46,7 @@ while true; do
 done
 
 echo "You wait 3 days for the seed to grow..."
+
 sleep 2
 echo "Your seed has germinated overnight!"
 echo "Total current days:"
