@@ -1,13 +1,14 @@
 #!/bin/bash
-echo "Hello Im Tom, welcome to PlantGrower 3000!!!"
+echo "Hello, I'm Tom. Welcome to PlantGrower 3000!!!"
 
 echo "What is your name?"
 read name
 
-echo "Hello $name. I have entrusted my garden to you"
+echo "Hello $name. I have entrusted my garden to you."
 sleep 2
 echo "Goodbye. I'll miss you. Goodbye :("
 
+# First choice: plant a seed
 while true; do
   read -p "Do you want to plant a new seed? (yes/no): " answer
   answer="${answer,,}" # Convert to lowercase
@@ -45,10 +46,59 @@ while true; do
   fi
 done
 
-echo "You wait 3 days for the seed to grow..."
+while true; do
+  read -p "Would you like to wait for your seed to grow? (yes/no): " answer
+  answer="${answer,,}"
+
+  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+    echo "You wait one day..."
+    sleep 2
+    break
+  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+    echo "Goodbye ... :("
+    sleep 2
+    exit 0
+  else
+    echo "Invalid input. Please enter yes or no."
+  fi
+done
+while true; do
+  read -p "Would you like to continue waiting for your seed to grow? (yes/no):" answer
+  answer="${answer,,}"
+
+  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+    echo "You wait one day..."
+    sleep 2
+    break
+  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+    echo "Goodbye ... :("
+    sleep 2
+    exit 0
+  else
+    echo "Invalid input. Please enter yes or no."
+  fi
+done
+while true; do
+  read -p "Would you like to wait for your seed to grow? (yes/no): " answer
+  answer="${answer,,}"
+
+  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+    echo "You wait one day..."
+    sleep 2
+    break
+  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+    echo "Goodbye ... :("
+    sleep 2
+    exit 0
+  else
+    echo "Invalid input. Please enter yes or no."
+  fi
+done
+
+echo "You waited 3 days for the seed to grow"
 
 sleep 2
-echo "Your seed has germinated overnight!"
+echo "YOUR SEED HAS GERMINATED OVERNIGHT!!!"
 echo "Total current days:"
 sleep 1
 echo "Day 1 - Planted the seed."
@@ -57,6 +107,7 @@ echo "Day 2 - Nothing happened."
 sleep 1
 echo "Day 3 - The seed has germinated overnight."
 
+# Next stage
 while true; do
   read -p "Would you like to wait one more day or leave now? (wait/leave): " choice
   choice="${choice,,}"
