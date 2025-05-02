@@ -133,3 +133,20 @@ sleep 1
 echo "Day 5 - Still nothing."
 sleep 1
 echo "Day 6 - Overnight, the plant grew into a SAPLING!"
+
+while true; do
+  read -p "Would you like to wait for your SAPLING to continue growing? (yes/no): " answer
+  answer="${answer,,}"  # Convert to lowercase
+
+  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+    echo "You wait one day..."
+    sleep 2
+    exit 0
+  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+    echo "You chose not to wait. Exiting."
+    exit 0
+  else
+    echo "Invalid input. Please enter yes or no."
+  fi
+done
+
