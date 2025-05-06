@@ -1,4 +1,7 @@
 #!/bin/bash
+play_again=true
+
+while $play_again; do
 echo "Hello, I'm Tom. Welcome to PlantGrower 3000!!!"
 
 echo "What is your name?"
@@ -6,7 +9,6 @@ read name
 
 echo "Hello $name. I have entrusted my garden to you."
 sleep 2
-echo "Goodbye. I'll miss you. Goodbye :("
 
 while true; do
   read -p "Do you want to plant a new seed? (yes/no): " answer
@@ -88,7 +90,7 @@ plant_leaves=2
 
 echo ""
 echo "Your sapling begins its growth journey..."
-sleep 2
+sleep 1
 echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 
 while [ "$days" -lt 21 ]; do
@@ -121,5 +123,33 @@ echo "Your sapling has fully matured!"
 echo "Total Age: 21 days"
 echo "Final Height: 34 cm"
 echo "Leaf Total: 34"
-echo "thank you for playing the game. You have finished PlantGrower3000"
-exit 0
+echo "Thank you for playing the game. You have finished PlantGrower3000"
+
+while true; do
+  read -p "$name Would you like to play the game again? (yes/no): " answer
+  answer="${answer,,}"
+
+  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+    echo "hello $name welcome back to PlantGrower3000"
+    sleep 2
+    break
+  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+    echo "Goodbye I had a good time with you"
+    sleep 2
+    exit 0
+  else
+    echo "Invalid input. Please enter yes or no."
+  fi
+done
+
+read -p "Would you like to play again? (yes/no): " answer
+  answer="${answer,,}"
+
+  if [[ "$answer" != "yes" && "$answer" != "y" ]]; then
+    play_again=false
+    echo "Thanks for playing!"
+  else
+    echo "Restarting the game..."
+    sleep 1
+  fi
+done
