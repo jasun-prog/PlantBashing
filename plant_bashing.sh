@@ -153,3 +153,4 @@ read -p "Would you like to play again? (yes/no): " answer
     sleep 1
   fi
 done
+read name
