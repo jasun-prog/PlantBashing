@@ -7,6 +7,7 @@ read -p "What is your name? " name
 echo "Hello $name. I have entrusted my garden to you."
 sleep 2
 
+
 while true; do
 if [ "$first_play" = false ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
@@ -18,7 +19,7 @@ if [ "$first_play" = false ]; then
   fi
 fi
 
-  
+  #ask the user if they would like to plant a seed. if not they exit the game
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
     answer="${answer,,}"
@@ -39,7 +40,7 @@ fi
   echo "In this digital computer world time moves alot faster than in your real world. Mere seconds in your world could be equal to hours, days, or months, in this world"
   sleep 1
 
-
+   #loop for if the user would like to wait for their seed to grow if not they will exit the game
   while true; do
     read -p "Would you like to wait for your seed to grow? (yes/no): " answer
     answer="${answer,,}"
@@ -66,10 +67,14 @@ fi
   echo "Day 2 - Nothing happened."
   sleep 1
   echo "Day 3 - The seed has germinated overnight."
-
+   
+  #check it its the players first time playing
   if [ "$first_play" = true ]; then
+    
+     #ask player if they would like to name their plant
     read -p "Do you want to name your plant? (yes/no):" name_choice
     name_choice="${name_choice,,}"
+    #if player says yes they get to name their plant if not their plants name is the default
     if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
       read -p "What would you like to name your plant? " plant_name
     else
@@ -80,11 +85,13 @@ fi
   while true; do
     read -p "Would you like to wait one more day or leave now? (wait/leave): " choice
     choice="${choice,,}"
+    #if the player chooses "wait"
     if [[ "$choice" == "wait" ]]; then
       echo "You wait patiently..."
       sleep 2
       echo "2 more days have passed. You may now move onto the third stage."
       break
+    #if the player chooses "leave"
     elif [[ "$choice" == "leave" ]]; then
       echo "You decide to leave before anything happens."
       sleep 2
@@ -109,14 +116,17 @@ fi
   sleep 1
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 
+  #loop continues as long as their are less than 21 days
   while [ "$days" -lt 21 ]; do
     echo ""
     read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
     answer="${answer,,}"
+    # if the player says "no"
     if [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo ""
       echo "You leave the garden, your sapling continues to grow on its own. Farewell!"
       exit 0
+    #if player chooses "yes" add 1 to days and 2 to plant height and leafs
     elif [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       days=$((days + 1))
       plant_height=$((plant_height + 2))
@@ -142,12 +152,15 @@ fi
   while true; do
     read -p "$name, would you like to play the game again? (yes/no): " answer
     answer="${answer,,}"
+    #if player wants to player again
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "Restarting the game..."
       echo "Welcome back $name, lets plant another plant together :)"
       sleep 1
+      #changes first play to false meaning that it is not the players first time playing the game
       first_play=false
       break
+    #if player does not want to play again then
     elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo "Goodbye! I had a good time with you."
       sleep 2
