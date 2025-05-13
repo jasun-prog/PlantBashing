@@ -9,11 +9,12 @@ sleep 2
 
 
 while true; do
+  #check if it is the players first time playing
 if [ "$first_play" = false ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
   if [[ "$rename_choice  == yes" || "$rename_choice" == "y" ]]; then
-    read -p "What would you like to name your plant? " plant_name
+    read -p "What would you like to name your plant (yes/no)? " plant_name
   else
     plant_name="Morpheus"
   fi
@@ -55,6 +56,36 @@ fi
     else
       echo "Invalid input. Please enter yes or no."
     fi
+  done
+  
+  while true; do
+    read -p "Would you like to wait one day for you plant to grow (yes/no)"
+    answer="${answer,,}"
+    #ask if user want to wait one day for the plant to grow
+    if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+      echo "You wait one more day"
+      sleep 2
+      break
+    elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+      echo "goodbye"
+      exit 0
+      echo "invalid input. please type yes or no"
+    fi 
+  done
+  
+  while true; do
+    read -p "Would you like to wait one day for you plant to grow (yes/no)"
+    answer="${answer,,}"
+    #ask if user wants to wait one day for plant to grow
+    if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
+      echo "You wait one more day"
+      sleep 2
+      break
+    elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
+      echo "goodbye"
+      exit 0
+      echo "invalid input. please type yes or no"
+    fi 
   done
 
   echo "You waited 3 days for the seed to grow"
