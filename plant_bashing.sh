@@ -1,4 +1,6 @@
 #!/bin/bash
+plant_name="Morpheus"
+first_play=true
 
 echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
@@ -6,6 +8,16 @@ echo "Hello $name. I have entrusted my garden to you."
 sleep 2
 
 while true; do
+if [ "$first_play" = false ]; then
+  read -p "Do you want to change your plant's name? (yes/no):" rename_choice
+  rename_choice="${rename_choice,,}"
+  if [[ "$rename_choice  == yes" || "$rename_choice" == "y" ]]; then
+    read -p "What would you like to name your plant? " plant_name
+  else
+    plant_name="Morpheus"
+  fi
+fi
+
   
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
@@ -55,7 +67,16 @@ while true; do
   sleep 1
   echo "Day 3 - The seed has germinated overnight."
 
-  
+  if [ "$first_play" = true ]; then
+    read -p "Do you want to name your plant? (yes/no):" name_choice
+    name_choice="${name_choice,,}"
+    if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
+      read -p "What would you like to name your plant? " plant_name
+    else
+      plant_name="Morpheus"
+    fi
+  fi
+
   while true; do
     read -p "Would you like to wait one more day or leave now? (wait/leave): " choice
     choice="${choice,,}"
@@ -125,6 +146,7 @@ while true; do
       echo "Restarting the game..."
       echo "Welcome back $name, lets plant another plant together :)"
       sleep 1
+      first_play=false
       break
     elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo "Goodbye! I had a good time with you."
