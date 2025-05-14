@@ -9,7 +9,7 @@ sleep 2
 
 
 while true; do
-  #check if it is the players first time playing
+  #check whether it is he first time playing
 if [ "$first_play" = false ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
@@ -17,10 +17,11 @@ if [ "$first_play" = false ]; then
     read -p "What would you like to name your plant (yes/no)? " plant_name
   else
     plant_name="Morpheus"
+    echo "Your plants name is $plant_name"
   fi
 fi
 
-  #ask the user if they would like to plant a seed. if not they exit the game
+  #ask user if they would like to plant a seed, if not they exit the game
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
     answer="${answer,,}"
@@ -41,7 +42,7 @@ fi
   echo "In this digital computer world time moves alot faster than in your real world. Mere seconds in your world could be equal to hours, days, or months, in this world"
   sleep 1
 
-   #loop for if the user would like to wait for their seed to grow if not they will exit the game
+   #loop for if the user would like to wait for their seed to grow, if not they will exit the game
   while true; do
     read -p "Would you like to wait for your seed to grow? (yes/no): " answer
     answer="${answer,,}"
@@ -61,7 +62,7 @@ fi
   while true; do
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
     answer="${answer,,}"
-    #ask if user want to wait one day for the plant to grow
+    #ask the user to wait day
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "You wait one more day"
       sleep 2
@@ -76,7 +77,7 @@ fi
   while true; do
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
     answer="${answer,,}"
-    #ask if user wants to wait one day for plant to grow
+    #ask user to wait one day
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "You wait one more day"
       sleep 2
@@ -188,7 +189,7 @@ fi
       echo "Restarting the game..."
       echo "Welcome back $name, lets plant another plant together :)"
       sleep 1
-      #changes first play to false meaning that it is not the players first time playing the game
+      #changes first play to false meaning that it is no longer the players first time playing
       first_play=false
       break
     #if player does not want to play again then
