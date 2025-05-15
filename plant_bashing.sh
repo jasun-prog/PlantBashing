@@ -1,11 +1,21 @@
 #!/bin/bash
-plant_name="Morpheus"
+default_names=("Morpheus" "Analiea" "Izzy")
 first_play=true
 
 echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
 echo "Hello $name. I have entrusted my garden to you."
 sleep 2
+
+while true; do
+  if ["$first_play" = false]; then
+    echo "How would you like to name your plant?"
+    echo "1. Choose your own name"
+    echo "2. No thanks"
+    read -p "Enter 1 or 2:" rename_choice
+
+    if ["$name_choice" == "1"]; then
+      read -p "what would you like to name your plant?" plant_name
 
 
 while true; do
