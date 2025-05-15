@@ -184,7 +184,7 @@ fi
   while true; do
     read -p "$name, would you like to play the game again? (yes/no): " answer
     answer="${answer,,}"
-    #if player wants to player again
+    #if player wants to player again then
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "Restarting the game..."
       echo "Welcome back $name, lets plant another plant together :)"
@@ -202,4 +202,3 @@ fi
     fi
   done
 done
-
