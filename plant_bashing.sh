@@ -1,6 +1,7 @@
 #!/bin/bash
 plant_named=false
-plant_name="Morpheus"
+default_names=("Morpheus" "Analiea" "Izzy")
+plant_name="${default_names[$RANDOM % ${#default_names[@]}]}"
 first_play=true
 
 echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
