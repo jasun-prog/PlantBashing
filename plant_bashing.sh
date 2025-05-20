@@ -115,8 +115,10 @@ fi
     if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
       read -p "What would you like to name your plant? " plant_name
       plant_named=true
+      echo "Your plant is now named $plant_name."
     else
       plant_name="Morpheus"
+      echo "OK your plant's default name is Morpheus."
     fi
   fi
 
