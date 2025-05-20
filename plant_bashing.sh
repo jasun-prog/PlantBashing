@@ -14,8 +14,9 @@ while true; do
 if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
-  if [[ "$rename_choice  == yes" || "$rename_choice" == "y" ]]; then
+  if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
     read -p "What would you like to name your plant (yes/no)? " plant_name
+    elif [[ "$rename_choice" == "no" || "$rename_choice" == "n" ]]; then
     plant_named=true
   else
     plant_name="Morpheus"
@@ -110,6 +111,7 @@ fi
     name_choice="${name_choice,,}"
     #if player says yes they get to name their plant if not their plants name is the default
     if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
+     
       read -p "What would you like to name your plant? " plant_name
       plant_named=true
     else
