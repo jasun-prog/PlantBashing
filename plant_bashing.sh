@@ -2,6 +2,9 @@
 plant_named=false
 plant_name="Morpheus"
 first_play=true
+  days=6
+  plant_height=2
+  plant_leaves=2
 
 echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
@@ -13,12 +16,13 @@ while true; do
 if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
-  if [[ "$rename_choice  == yes" || "$rename_choice" == "y" ]]; then
-    read -p "What would you like to name your plant (yes/no)? " plant_name
+ if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
+    read -p "What would you like to name your plant" plant_name
     plant_named=true
-  else
-    plant_name="Morpheus"
-    echo "Your plants name is $plant_name"
+ elif [[ "$rename_choice" == "no" || "$rename_choice" == "n" ]]; then
+    echo "Ok your plants name is $plant_name"
+  else 
+    echo "Invalid input keeping the current name $plant_name"
   fi
 fi
 
@@ -141,12 +145,10 @@ fi
   sleep 1
   echo "Day 5 - Still nothing."
   sleep 1
-  echo "Day 6 - Overnight, the plant grew into a SAPLING!"
-  days=6
-  plant_height=2
-  plant_leaves=2
+  echo "Day 6 - OVERNIGHT THE PLANT BECAME A SAPLING"
+
   echo ""
-  echo "Your sapling begins its growth journey..."
+  echo "YOUR SAPLING BEGINS ITS GROWTH JOURNEY"
   sleep 1
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 
