@@ -1,6 +1,7 @@
 #!/bin/bash
 plant_named=false
-plant_name="Morpheus"
+names=(Morpheus Analiea Izzy)
+name_index=0
 first_play=true
   days=6
   plant_height=2
@@ -111,14 +112,19 @@ fi
      #ask player if they would like to name their plant
     read -p "Do you want to name your plant? (yes/no):" name_choice
     name_choice="${name_choice,,}"
+    
     #if player says yes they get to name their plant if not their plants name is the default
     if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
       read -p "What would you like to name your plant? " plant_name
       plant_named=true
       echo "Your plant is now named $plant_name."
     else
-      plant_name="Morpheus"
-      echo "OK your plant's default name is Morpheus."
+      #assign the plant_named variable to the current default name from the names array using name_index
+      plant_name=${names[name_index]}
+      plant_named=true
+      echo "OK your plant's default name is $plant_name."
+      #increment and wrap
+      name_index=$(( (name_index + 1) % ${#names[@]} ))
     fi
   fi
 
