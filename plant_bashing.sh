@@ -15,11 +15,11 @@ if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
   rename_choice="${rename_choice,,}"
   if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
     read -p "What would you like to name your plant (yes/no)? " plant_name
-    elif [[ "$rename_choice" == "no" || "$rename_choice" == "n" ]]; then
     plant_named=true
-  else
-    plant_name="Morpheus"
-    echo "Your plants name is $plant_name"
+    elif [[ "$rename_choice" == "no" || "$rename_choice" == "n" ]]; then
+      echo "Ok your plant's default name is Morpheus"
+    else
+   echo "Invalid input keeping the current name $plant_name"
   fi
 fi
 
