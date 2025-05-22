@@ -47,8 +47,9 @@ fi
 
   echo "In this digital computer world time moves alot faster than in your real world. Mere seconds in your world could be equal to hours, days, or months, in this world"
   sleep 1
-
+   
    #loop for if the user would like to wait for their seed to grow, if not they will exit the game
+   for i in {1..2}; do
   while true; do
     read -p "Would you like to wait for your seed to grow? (yes/no): " answer
     answer="${answer,,}"
@@ -76,9 +77,11 @@ fi
     elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo "goodbye"
       exit 0
+    else
       echo "invalid input. please type yes or no"
     fi 
   done
+done
   
   while true; do
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
@@ -120,11 +123,9 @@ fi
       echo "Your plant is now named $plant_name."
     else
       #assign the plant_named variable to the current default name from the names array using name_index
-      plant_name=${names[name_index]}
+      plant_name=${names[RANDOM % ${#names[@]}]}
       plant_named=true
       echo "OK your plant's default name is $plant_name."
-      #increment and wrap
-      name_index=$(( (name_index + 1) % ${#names[@]} ))
     fi
   fi
 
