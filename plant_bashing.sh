@@ -6,6 +6,7 @@ first_play=true
   days=6
   plant_height=2
   plant_leaves=2
+  weather_conditions=(Rainy Sunny Cloudy Overcast Windstorm Rainy Foggy)
 
 echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
@@ -125,7 +126,7 @@ done
       #assign the plant_named variable to the current default name from the names array using name_index
       plant_name=${names[RANDOM % ${#names[@]}]}
       plant_named=true
-      echo "OK your plant's default name is $plant_name."
+      echo "OK your plant's name is $plant_name."
     fi
   fi
 
@@ -163,6 +164,8 @@ done
 
   #loop continues as long as their are less than 21 days
   while [ "$days" -lt 21 ]; do
+    #randomly select a weather condition from the weather array
+    weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
     echo ""
     read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
     answer="${answer,,}"
@@ -179,6 +182,7 @@ done
       echo ""
       echo "A day passes..."
       echo "Day $days"
+      echo "Weather $weather"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
       sleep 2
