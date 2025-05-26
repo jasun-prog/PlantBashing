@@ -20,7 +20,8 @@ prompt_yes_no(){
     return 1
   else
     echo "invalid input please type yes or no"
-  fi done
+  fi
+   done
 }
 
 get_weather(){
