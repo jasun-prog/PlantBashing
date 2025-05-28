@@ -8,21 +8,6 @@ first_play=true
   plant_leaves=2
   weather_conditions=(Rainy Sunny Cloudy Overcast Windstorm Rainy Foggy)
 
-#functions
-prompt_yes_no(){
-  local prompt=$1
-  while true do;
-  read -p "$prompt (yes/no): " answer
-  answer="$answer"
-  if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
-    return 0
-  elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
-    return 1
-  else
-    echo "invalid input please type yes or no"
-  fi
-   done
-}
 
 get_weather(){
   weather+${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
