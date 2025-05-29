@@ -1,4 +1,8 @@
 #!/bin/bash
+growth_rate=2
+growth_ready=true
+grow_today=false
+growth_ready=false
 plant_named=false
 names=(Morpheus Analiea Izzy)
 name_index=0
@@ -10,18 +14,20 @@ first_play=true
 
 
 get_weather(){
-  weather+${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
+    echo "${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}"
+
 }
 
-
-echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
+great_user(){
+  echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
 echo "Hello $name. I have entrusted my garden to you."
 sleep 2
 
-while true; do
-  #check whether it is he first time playing
-if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
+}
+
+rename_plant_if_needed(){
+  if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
  if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
@@ -33,8 +39,9 @@ if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
     echo "Invalid input keeping the current name $plant_name"
   fi
 fi
+}
 
-  #ask user if they would like to plant a seed, if not they exit the game
+prompt_to_plant_seed(){
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
     answer="${answer,,}"
@@ -51,12 +58,11 @@ fi
       echo "Invalid input. Please enter yes or no."
     fi
   done
-
-  echo "In this digital computer world time moves alot faster than in your real world. Mere seconds in your world could be equal to hours, days, or months, in this world"
-  sleep 1
-   
-   #loop for if the user would like to wait for their seed to grow, if not they will exit the game
-   for i in {1..2}; do
+}
+  
+  
+wait_for_growth_days(){
+for i in {1..2}; do
   while true; do
     read -p "Would you like to wait for your seed to grow? (yes/no): " answer
     answer="${answer,,}"
@@ -72,8 +78,15 @@ fi
       echo "Invalid input. Please enter yes or no."
     fi
   done
+done
+}
+
   
-  while true; do
+  
+
+
+  wait_one_day_prompt(){
+      while true; do
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
     answer="${answer,,}"
     #ask the user to wait day
@@ -88,26 +101,13 @@ fi
       echo "invalid input. please type yes or no"
     fi 
   done
-done
-  
-  while true; do
-    read -p "Would you like to wait one day for you plant to grow (yes/no)"
-    answer="${answer,,}"
-    #ask user to wait one day
-    if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
-      echo "You wait one more day"
-      sleep 2
-      break
-    elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
-      echo "goodbye"
-      exit 0
-      echo "invalid input. please type yes or no"
-    fi 
-  done
-
+  }
+ 
+  announce_seed_germination(){
   echo "You waited 3 days for the seed to grow"
   sleep 2
   echo "YOUR SEED HAS GERMINATED OVERNIGHT!!!"
+  growth_ready=true
   echo "Total current days:"
   sleep 1
   echo "Day 1 - Planted the seed."
@@ -115,12 +115,14 @@ done
   echo "Day 2 - Nothing happened."
   sleep 1
   echo "Day 3 - The seed has germinated overnight."
-   
-  #check it its the players first time playing
+  }
+
+  name_plant(){
+#check it its the players first time playing
   if [ "$first_play" = true ]; then
     
      #ask player if they would like to name their plant
-    read -p "Do you want to name your plant? (yes/no):" name_choice
+    read -p "Do you want to name your plant? (yes/no) :" name_choice
     name_choice="${name_choice,,}"
     
     #if player says yes they get to name their plant if not their plants name is the default
@@ -135,8 +137,10 @@ done
       echo "OK your plant's name is $plant_name."
     fi
   fi
-
-  while true; do
+  } 
+  
+wait_two_more_days(){
+while true; do
     read -p "Would you like to wait one more day or leave now? (wait/leave): " choice
     choice="${choice,,}"
     #if the player chooses "wait"
@@ -154,8 +158,10 @@ done
       echo "Invalid input. Please type 'wait' or 'leave'."
     fi
   done
-
-  echo "You waited 2 more days..."
+}
+  
+announce_sapling(){
+echo "You waited 2 more days..."
   sleep 1
   echo "Day 4 - Nothing happened."
   sleep 1
@@ -167,8 +173,50 @@ done
   echo "YOUR SAPLING BEGINS ITS GROWTH JOURNEY"
   sleep 1
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
+}
+  apply_weather_conditions(){
+    case "$weather" in
+    "Rainy")
+      echo "Its rainy no growth today but your plant absords nutrients"
+      growth_rate=$((growth_rate +2))
+      growth_today=false
+      ;;
+    "Sunny")
+      echo "Its sunny your plant grows alot"
+      growth_rate=$((growth_rate +3))
+      growth_today= true
+      ;;
+    "Cloudy")
+      echo "its cloudy no growth today"
+      growth_today=false
+      ;;
+    "Overcast")
+      echo "its overcast some growth happends"
+      growth_today=true
+      ;;
+    "Windstorm")
+      echo "A windstorm!!! no growth and your plant gets damaged"
+      growth_rate=$((growth_rate -2))
+      plant_leaves=$((plant_leaves -3))
+      growth_today=false
+      ;;
+    "Foggy")
+      echo "its foggy today no growth"
+      growth_rate=$((growth_rate -2))
+      growth_today=false
+      ;;
 
-  #loop continues as long as their are less than 21 days
+
+  }
+sapling_growth_loop(){
+  if [ "$growth_ready" = true ]; then
+    echo "Your plant is ready to grow"
+  else
+    echo "Your plant is not ready to grow"
+    return
+  fi
+
+ #loop continues as long as their are less than 21 days
   while [ "$days" -lt 21 ]; do
     #randomly select a weather condition from the weather array
     weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
@@ -196,15 +244,19 @@ done
       echo "Invalid input. Please enter yes or no."
     fi
   done
-
+}
+ 
+end_game_summary(){
   echo ""
   echo "Your sapling has fully grown!"
   echo "Total Age: $days days"
   echo "Final Height: ${plant_height} cm"
   echo "Leaf Total: $plant_leaves"
   echo "Thank you for playing the game. You have finished PlantGrower3000"
-  
-  while true; do
+}
+
+  prompt_play_again(){
+ while true; do
     read -p "$name, would you like to play the game again? (yes/no): " answer
     answer="${answer,,}"
     #if player wants to player again then
@@ -224,4 +276,20 @@ done
       echo "Invalid input. Please enter yes or no."
     fi
   done
+}
+
+  
+  while true; do
+  great_user
+  rename_plant_if_needed
+  prompt_to_plant_seed
+  wait_for_growth_days
+  announce_seed_germination
+  name_plant
+  wait_two_more_days
+  announce_sapling
+  sapling_growth_loop
+  end_game_summary
+  prompt_play_again
 done
+ 
