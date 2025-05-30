@@ -1,6 +1,5 @@
 #!/bin/bash
 growth_rate=2
-growth_ready=true
 grow_today=false
 growth_ready=false
 plant_named=false
@@ -107,7 +106,6 @@ done
   echo "You waited 3 days for the seed to grow"
   sleep 2
   echo "YOUR SEED HAS GERMINATED OVERNIGHT!!!"
-  growth_ready=true
   echo "Total current days:"
   sleep 1
   echo "Day 1 - Planted the seed."
@@ -175,7 +173,7 @@ echo "You waited 2 more days..."
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 }
   apply_weather_conditions(){
-    case "$weather" in
+     case "$weather" in
     "Rainy")
       echo "Its rainy no growth today but your plant absords nutrients"
       growth_rate=$((growth_rate +2))
@@ -184,7 +182,7 @@ echo "You waited 2 more days..."
     "Sunny")
       echo "Its sunny your plant grows alot"
       growth_rate=$((growth_rate +3))
-      growth_today= true
+      growth_today=true
       ;;
     "Cloudy")
       echo "its cloudy no growth today"
@@ -205,9 +203,9 @@ echo "You waited 2 more days..."
       growth_rate=$((growth_rate -2))
       growth_today=false
       ;;
-
-
+    esac
   }
+
 sapling_growth_loop(){
   if [ "$growth_ready" = true ]; then
     echo "Your plant is ready to grow"
@@ -220,6 +218,8 @@ sapling_growth_loop(){
   while [ "$days" -lt 21 ]; do
     #randomly select a weather condition from the weather array
     weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
+      apply_weather_conditions
+
     echo ""
     read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
     answer="${answer,,}"
@@ -230,20 +230,27 @@ sapling_growth_loop(){
       exit 0
     #if player chooses "yes" add 1 to days and 2 to plant height and leafs
     elif [[ "$answer" == "yes" || "$answer" == "y" ]]; then
-      days=$((days + 1))
-      plant_height=$((plant_height + 2))
-      plant_leaves=$((plant_leaves + 2))
       echo ""
       echo "A day passes..."
       echo "Day $days"
       echo "Weather $weather"
+
+      if [ "growth_today" = true ]; then
+        plant_height=$((plant_height + growth_rate))
+        plant_leaves=$((plant_leaves + growth_rate))
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
-      sleep 2
     else
-      echo "Invalid input. Please enter yes or no."
-    fi
-  done
+      echo "No growth today"
+       echo "Height: ${plant_height}cm"
+      echo "Leaves: $plant_leaves"
+     fi
+
+     days=$((days + 1))
+   else
+    echo "invalid input please enter yes or no"
+  fi
+done
 }
  
 end_game_summary(){
@@ -288,6 +295,7 @@ end_game_summary(){
   name_plant
   wait_two_more_days
   announce_sapling
+  growth_ready=true
   sapling_growth_loop
   end_game_summary
   prompt_play_again
