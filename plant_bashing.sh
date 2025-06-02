@@ -11,12 +11,12 @@ first_play=true
   plant_leaves=2
   weather_conditions=(Rainy Sunny Cloudy Overcast Windstorm Rainy Foggy)
 
-
+#function for weather conditions
 get_weather(){
     echo "${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}"
 
 }
-
+#function to greet user 
 great_user(){
   echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
@@ -24,11 +24,13 @@ echo "Hello $name. I have entrusted my garden to you."
 sleep 2
 
 }
-
+#function for renaming plant if needed
 rename_plant_if_needed(){
+  #if first plat is false and they have named their plant then ask if they want to change their plants name
   if [ "$first_play" = false ] && [ "$plant_named" = true ]; then
   read -p "Do you want to change your plant's name? (yes/no):" rename_choice
   rename_choice="${rename_choice,,}"
+  #if they say yes then ask if they would like to name their plant
  if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
     read -p "What would you like to name your plant" plant_name
     plant_named=true
@@ -214,11 +216,8 @@ sapling_growth_loop(){
     return
   fi
 
- #loop continues as long as their are less than 21 days
-  while [ "$days" -lt 21 ]; do
-    #randomly select a weather condition from the weather array
-    weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
-      apply_weather_conditions
+ #loop continues as long as the plant reaches 35cm in height
+while (( plant_height < 30 )); do
 
     echo ""
     read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
@@ -233,15 +232,22 @@ sapling_growth_loop(){
       echo ""
       echo "A day passes..."
       echo "Day $days"
-      echo "Weather $weather"
+   
 
-      if [ "growth_today" = true ]; then
-        plant_height=$((plant_height + growth_rate))
-        plant_leaves=$((plant_leaves + growth_rate))
+      #randomly select a weather condition from the weather array
+    weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
+         echo "Weather $weather"
+      apply_weather_conditions
+
+      if [ "$growth_today" = true ]; then
+       plant_height=$(echo "$plant_height + 1.5" | bc)
+       plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc)
+       echo "GROWTH TODAY !!! :)"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
     else
       echo "No growth today"
+      echo "Growth rate: $growth_rate"
        echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
      fi
