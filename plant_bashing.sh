@@ -1,5 +1,5 @@
 #!/bin/bash
-growth_rate=2
+growth_rate=1
 grow_today=false
 growth_ready=false
 plant_named=false
@@ -17,7 +17,7 @@ get_weather(){
 
 }
 #function to greet user 
-great_user(){
+greet_user(){
   echo "Hello, I'm Tom. Welcome to ULTRA SIGMA MAKER 2000 V2 PLANTGROWER!!!"
 read -p "What is your name? " name
 echo "Hello $name. I have entrusted my garden to you."
@@ -32,7 +32,7 @@ rename_plant_if_needed(){
   rename_choice="${rename_choice,,}"
   #if they say yes then ask if they would like to name their plant
  if [[ "$rename_choice" == "yes" || "$rename_choice" == "y" ]]; then
-    read -p "What would you like to name your plant" plant_name
+    read -p "What would you like to name your plant?" plant_name
     plant_named=true
  elif [[ "$rename_choice" == "no" || "$rename_choice" == "n" ]]; then
     echo "Ok your plants name is $plant_name"
@@ -168,6 +168,9 @@ echo "You waited 2 more days..."
   echo "Day 5 - Still nothing."
   sleep 1
   echo "Day 6 - OVERNIGHT THE PLANT BECAME A SAPLING"
+  sleep 1
+  plant_height=2
+  plant_leaves=2
 
   echo ""
   echo "YOUR SAPLING BEGINS ITS GROWTH JOURNEY"
@@ -206,6 +209,8 @@ echo "You waited 2 more days..."
       growth_today=false
       ;;
     esac
+    total_days=0
+    windstorm_count=0
   }
 
 sapling_growth_loop(){
@@ -217,7 +222,7 @@ sapling_growth_loop(){
   fi
 
  #loop continues as long as the plant reaches 35cm in height
-while (( plant_height < 30 )); do
+while (($(echo "$plant_height < 35" | bc -l))); do
 
     echo ""
     read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
@@ -240,8 +245,8 @@ while (( plant_height < 30 )); do
       apply_weather_conditions
 
       if [ "$growth_today" = true ]; then
-       plant_height=$(echo "$plant_height + 1.5" | bc)
-       plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc)
+       plant_height=$(echo "$plant_height + 1.5" | bc -l)
+       plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc -l)
        echo "GROWTH TODAY !!! :)"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
@@ -293,7 +298,7 @@ end_game_summary(){
 
   
   while true; do
-  great_user
+  greet_user
   rename_plant_if_needed
   prompt_to_plant_seed
   wait_for_growth_days
