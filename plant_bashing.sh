@@ -1,5 +1,5 @@
 #!/bin/bash
-growth_rate=1
+growth_rate=1.0
 grow_today=false
 growth_ready=false
 plant_named=false
@@ -181,12 +181,12 @@ echo "You waited 2 more days..."
      case "$weather" in
     "Rainy")
       echo "Its rainy no growth today but your plant absords nutrients"
-      growth_rate=$((growth_rate +2))
+     growth_rate=$(echo "$growth_rate - 2" | bc -l)
       growth_today=false
       ;;
     "Sunny")
       echo "Its sunny your plant grows alot"
-      growth_rate=$((growth_rate +3))
+    growth_rate=$(echo "$growth_rate - 2" | bc -l)
       growth_today=true
       ;;
     "Cloudy")
@@ -199,18 +199,16 @@ echo "You waited 2 more days..."
       ;;
     "Windstorm")
       echo "A windstorm!!! no growth and your plant gets damaged"
-      growth_rate=$((growth_rate -2))
-      plant_leaves=$((plant_leaves -3))
+      growth_rate=$(echo "$growth_rate - 2" | bc -l)
+     plant_leaves=$(echo "$plant_leaves - 3" | bc -l)
       growth_today=false
       ;;
     "Foggy")
       echo "its foggy today no growth"
-      growth_rate=$((growth_rate -2))
+      growth_rate=$(echo "$growth_rate - 2" | bc -l)
       growth_today=false
       ;;
     esac
-    total_days=0
-    windstorm_count=0
   }
 
 sapling_growth_loop(){
@@ -257,7 +255,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
       echo "Leaves: $plant_leaves"
      fi
 
-     days=$((days + 1))
+    days=$(echo "$days + 1" | bc)
    else
     echo "invalid input please enter yes or no"
   fi
