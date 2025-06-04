@@ -1,4 +1,5 @@
 #!/bin/bash
+
 growth_rate=1.0
 grow_today=false
 growth_ready=false
@@ -10,11 +11,24 @@ first_play=true
   plant_height=2
   plant_leaves=2
   weather_conditions=(Rainy Sunny Cloudy Overcast Windstorm Rainy Foggy)
+  windstorm_count=0
 
 #function for weather conditions
 get_weather(){
     echo "${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}"
 
+}
+#function to make sure leaves dont go into the negative
+clamp_leaves(){
+  if (( $(echo "$plant_leaves < 0" | bc -l) )); then
+    plant_leaves=0
+  fi
+}
+#function to make sure growth_rate dont go into the negative
+clamp_growth_rate(){
+    if (( $(echo "$growth_rate < 0" | bc -l) )); then
+      growth_rate=0
+    fi
 }
 #function to greet user 
 greet_user(){
@@ -46,11 +60,13 @@ prompt_to_plant_seed(){
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
     answer="${answer,,}"
+    #if the user wants to plant a seed then echo out
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "You dig a hole in soft soil."
       sleep 2
       echo "You plant a seed the size of a marble."
       break
+      #if they dont then they "walk away" and the game ends
     elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo "You walk away from the garden without planting anything."
       sleep 2
@@ -63,7 +79,9 @@ prompt_to_plant_seed(){
   
   
 wait_for_growth_days(){
+  # Loop from 1 to 2, running the code inside the loop twice
 for i in {1..2}; do
+  
   while true; do
     read -p "Would you like to wait for your seed to grow? (yes/no): " answer
     answer="${answer,,}"
@@ -82,11 +100,7 @@ for i in {1..2}; do
 done
 }
 
-  
-  
-
-
-  wait_one_day_prompt(){
+wait_one_day_prompt(){
       while true; do
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
     answer="${answer,,}"
@@ -104,7 +118,7 @@ done
   done
   }
  
-  announce_seed_germination(){
+announce_seed_germination(){
   echo "You waited 3 days for the seed to grow"
   sleep 2
   echo "YOUR SEED HAS GERMINATED OVERNIGHT!!!"
@@ -117,7 +131,7 @@ done
   echo "Day 3 - The seed has germinated overnight."
   }
 
-  name_plant(){
+name_plant(){
 #check it its the players first time playing
   if [ "$first_play" = true ]; then
     
@@ -167,55 +181,66 @@ echo "You waited 2 more days..."
   sleep 1
   echo "Day 5 - Still nothing."
   sleep 1
-  echo "Day 6 - OVERNIGHT THE PLANT BECAME A SAPLING"
+  echo "Day 6 - OVERNIGHT $plant_name BECAME A SAPLING"
   sleep 1
   plant_height=2
   plant_leaves=2
 
   echo ""
-  echo "YOUR SAPLING BEGINS ITS GROWTH JOURNEY"
+  echo "$plant_name IS BEGGINING ITS GROWTH JOURNEY"
   sleep 1
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 }
-  apply_weather_conditions(){
+apply_weather_conditions(){
+  # Start a case statement to handle different weather conditions based on the value of $weather
      case "$weather" in
     "Rainy")
-      echo "Its rainy no growth today but your plant absords nutrients"
+      echo "Its rainy no growth today but $plant_name absords nutrients"
      growth_rate=$(echo "$growth_rate - 2" | bc -l)
+     clamp_growth_rate
       growth_today=false
       ;;
     "Sunny")
-      echo "Its sunny your plant grows alot"
+      echo "Its sunny your $plant_name grows alot"
     growth_rate=$(echo "$growth_rate - 2" | bc -l)
+    clamp_growth_rate
       growth_today=true
       ;;
     "Cloudy")
-      echo "its cloudy no growth today"
+      echo "its cloudy no growth for $plant_name today"
       growth_today=false
       ;;
     "Overcast")
-      echo "its overcast some growth happends"
+      echo "its overcast some growth happens for $plant_name"
       growth_today=true
       ;;
     "Windstorm")
-      echo "A windstorm!!! no growth and your plant gets damaged"
+      echo "A windstorm!!! no growth and $plant_name gets damaged"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
      plant_leaves=$(echo "$plant_leaves - 3" | bc -l)
+     clamp_growth_rate
+     clamp_leaves
+      ((windstorm_count++))
       growth_today=false
       ;;
     "Foggy")
-      echo "its foggy today no growth"
+      echo "its foggy today no growth for $plant_name"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
+      clamp_growth_rate
       growth_today=false
-      ;;
+      ;; # End of this case option; continue to next case or exit case block
+
+      # End of the case statement
     esac
+
+
   }
 
 sapling_growth_loop(){
   if [ "$growth_ready" = true ]; then
-    echo "Your plant is ready to grow"
+    echo "$plant_name is ready to grow"
   else
-    echo "Your plant is not ready to grow"
+    echo "$plant_name is not ready to grow"
     return
   fi
 
@@ -223,7 +248,7 @@ sapling_growth_loop(){
 while (($(echo "$plant_height < 35" | bc -l))); do
 
     echo ""
-    read -p "Do you want to keep watching your sapling grow? (yes/no): " answer
+    read -p "Do you want to keep watching $plant_name grow? (yes/no): " answer
     answer="${answer,,}"
     # if the player says "no"
     if [[ "$answer" == "no" || "$answer" == "n" ]]; then
@@ -245,6 +270,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
       if [ "$growth_today" = true ]; then
        plant_height=$(echo "$plant_height + 1.5" | bc -l)
        plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc -l)
+       clamp_leaves
        echo "GROWTH TODAY !!! :)"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
@@ -264,14 +290,15 @@ done
  
 end_game_summary(){
   echo ""
-  echo "Your sapling has fully grown!"
+  echo "$plant_name has fully grown!"
   echo "Total Age: $days days"
   echo "Final Height: ${plant_height} cm"
   echo "Leaf Total: $plant_leaves"
   echo "Thank you for playing the game. You have finished PlantGrower3000"
+  echo "$plant_name has survived $windstorm_count WIN"
 }
 
-  prompt_play_again(){
+prompt_play_again(){
  while true; do
     read -p "$name, would you like to play the game again? (yes/no): " answer
     answer="${answer,,}"
