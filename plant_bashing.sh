@@ -16,6 +16,7 @@ first_play=true
 
 #function for weather conditions
 get_weather(){
+  #selects a random weather condition from the array
     echo "${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}"
 
 }
@@ -63,6 +64,7 @@ fi
 }
 
 prompt_to_plant_seed(){
+  #starts the loop
   while true; do
     read -p "Do you want to plant a new seed? (yes/no): " answer
     answer="${answer,,}"
