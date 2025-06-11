@@ -16,7 +16,7 @@ first_play=true
 
 #function for weather conditions
 get_weather(){
-  #selects a random weather condition from the array
+  #chooses a random weather condition from the array
     echo "${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}"
 
 }
@@ -115,10 +115,13 @@ wait_one_day_prompt(){
     read -p "Would you like to wait one day for you plant to grow (yes/no)"
     answer="${answer,,}"
     #ask the user to wait day
+
+    #if they say yes then they wait one more day
     if [[ "$answer" == "yes" || "$answer" == "y" ]]; then
       echo "You wait one more day"
       sleep 2
       break
+      #if they say no then the game ends
     elif [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo "goodbye"
       exit 0
@@ -128,7 +131,7 @@ wait_one_day_prompt(){
   done
   }
  
-#functioon to announce that the user's seed has germinated
+#functioon to announce that the player's seed has germinated
 announce_seed_germination(){
   echo "You waited 3 days for the seed to grow"
   sleep 2
@@ -148,9 +151,10 @@ name_plant(){
     
      #ask player if they would like to name their plant
     read -p "Do you want to name your plant? (yes/no) :" name_choice
+    #variable to store the players plant name
     name_choice="${name_choice,,}"
     
-    #if player says yes they get to name their plant if not their plants name is the default
+    #if player says yes they get to name their plant
     if [[ "$name_choice" == "yes" || "$name_choice" == "y" ]]; then
       read -p "What would you like to name your plant? " plant_name
       plant_named=true
@@ -168,13 +172,13 @@ wait_two_more_days(){
 while true; do
     read -p "Would you like to wait one more day or leave now? (wait/leave): " choice
     choice="${choice,,}"
-    #if the player chooses "wait"
+    #if the player chooses "wait" 2 days have passes
     if [[ "$choice" == "wait" ]]; then
       echo "You wait patiently..."
       sleep 2
       echo "2 more days have passed. You may now move onto the third stage."
       break
-    #if the player chooses "leave"
+    #if the player chooses "leave" the game ends
     elif [[ "$choice" == "leave" ]]; then
       echo "You decide to leave before anything happens."
       sleep 2
@@ -194,6 +198,8 @@ echo "You waited 2 more days..."
   sleep 1
   echo "Day 6 - OVERNIGHT $plant_name BECAME A SAPLING"
   sleep 1
+
+  #sets initial value for when the plant becomes a sapling
   plant_height=2
   plant_leaves=2
 
@@ -202,29 +208,30 @@ echo "You waited 2 more days..."
   sleep 1
   echo "Starting from Day $days — Height: ${plant_height}cm, Leaves: $plant_leaves"
 }
+
 apply_weather_conditions(){
   # Start a case statement to handle different weather conditions based on the value of $weather
      case "$weather" in
-    "Rainy")
+    "Rainy") #part of a case statement and matches with when the weather type is windstorm
       echo "Its rainy no growth today but $plant_name absords nutrients"
      growth_rate=$(echo "$growth_rate - 2" | bc -l)
      clamp_growth_rate
       growth_today=false
-      ;; # End of this case option; continue to next case or exit case block
+      ;; # End of this case option continues to the next case or exit case block
     "Sunny")
       echo "Its sunny your $plant_name grows alot"
     growth_rate=$(echo "$growth_rate - 2" | bc -l)
     clamp_growth_rate
       growth_today=true
-      ;; # End of this case option; continue to next case or exit case block
+      ;; 
     "Cloudy")
       echo "its cloudy no growth for $plant_name today"
       growth_today=false
-      ;; # End of this case option; continue to next case or exit case block
+      ;; 
     "Overcast")
       echo "its overcast some growth happens for $plant_name"
       growth_today=true
-      ;; # End of this case option; continue to next case or exit case block
+      ;; 
     "Windstorm")
       echo "A windstorm!!! no growth and $plant_name gets damaged"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
@@ -233,13 +240,13 @@ apply_weather_conditions(){
      clamp_leaves
       ((windstorm_count++))
       growth_today=false
-      ;; # End of this case option; continue to next case or exit case block
+      ;; 
     "Foggy")
       echo "its foggy today no growth for $plant_name"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
       clamp_growth_rate
       growth_today=false
-      ;; # End of this case option; continue to next case or exit case block
+      ;; 
 
       # End of the case statement
     esac
@@ -248,6 +255,7 @@ apply_weather_conditions(){
   }
 
 sapling_growth_loop(){
+  #check if the plant is ready to start growing
   if [ "$growth_ready" = true ]; then
     echo "$plant_name is ready to grow"
   else
@@ -261,7 +269,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
     echo ""
     read -p "Do you want to keep watching $plant_name grow? (yes/no): " answer
     answer="${answer,,}"
-    # if the player says "no"
+    # if the player says "no" then the game ends
     if [[ "$answer" == "no" || "$answer" == "n" ]]; then
       echo ""
       echo "You leave the garden, your sapling continues to grow on its own. Farewell!"
@@ -277,7 +285,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
     weather=${weather_conditions[$RANDOM % ${#weather_conditions[@]}]}
          echo "Weather $weather"
       apply_weather_conditions
-
+       #check if plant is able to grow today due to weather
       if [ "$growth_today" = true ]; then
        plant_height=$(echo "$plant_height + 1.5" | bc -l)
        plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc -l)
@@ -285,6 +293,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
        echo "GROWTH TODAY !!! :)"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
+   #plant is not able to grow then add 1 to days
     else
       echo "No growth today"
       echo "Growth rate: $growth_rate"
@@ -299,7 +308,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
 done
 }
  
-end_game_summary(){
+end_game_summary(){ #end of game messages
   echo ""
   echo "$plant_name has fully grown!"
   echo "Total Age: $days days"
@@ -333,18 +342,18 @@ prompt_play_again(){
 }
 
   
-  while true; do
-  greet_user
-  rename_plant_if_needed
-  prompt_to_plant_seed
-  wait_for_growth_days
-  announce_seed_germination
-  name_plant
-  wait_two_more_days
-  announce_sapling
-  growth_ready=true
-  sapling_growth_loop
-  end_game_summary
-  prompt_play_again
+  while true; do #loop that runs until the player chooses to stop the game
+  greet_user #greets user and asks for name
+  rename_plant_if_needed #ask if they want to rename their plant if its their 2nd time playing
+  prompt_to_plant_seed #asks if they want to plant a seed
+  wait_for_growth_days #wait 2 days before germination stage
+  announce_seed_germination #announce that the seed has germinated
+  name_plant #lets user name their plant
+  wait_two_more_days #they wait 2 more days
+  announce_sapling #announce that the plant is now a sapling
+  growth_ready=true #marks that the plant is now ready to grow
+  sapling_growth_loop #runs the main growth phase of the plant
+  end_game_summary #shows the stats of the plant after it has reached 35cm in height
+  prompt_play_again #ask if they want to play again
 done
  
