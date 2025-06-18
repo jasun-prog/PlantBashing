@@ -21,14 +21,14 @@ get_weather(){
 
 }
 #function to make sure leaves dont go into the negative
-clamp_leaves(){
+leaves_less_than_0(){
   #if plant_leaves is less than 0 then reset it to 0
   if (( $(echo "$plant_leaves < 0" | bc -l) )); then
     plant_leaves=0
   fi
 }
 #function to make sure growth_rate dont go into the negative
-clamp_growth_rate(){
+growth_rate_less_than_0(){
   #if the growth rate is less than 0 then reset it to 0
     if (( $(echo "$growth_rate < 0" | bc -l) )); then
       growth_rate=0
@@ -129,7 +129,7 @@ wait_one_day_prompt(){
       echo "invalid input. please type yes or no"
     fi 
   done
-  }
+}
  
 #functioon to announce that the player's seed has germinated
 announce_seed_germination(){
@@ -143,7 +143,7 @@ announce_seed_germination(){
   echo "Day 2 - Nothing happened."
   sleep 1
   echo "Day 3 - The seed has germinated overnight."
-  }
+}
 
 name_plant(){
 #check it its the players first time playing
@@ -210,18 +210,18 @@ echo "You waited 2 more days..."
 }
 
 apply_weather_conditions(){
-  # Start a case statement to handle different weather conditions based on the value of $weather
+  # start a case statement to handle different weather conditions based on the value of $weather
      case "$weather" in
     "Rainy") #part of a case statement and matches with when the weather type is windstorm
       echo "Its rainy no growth today but $plant_name absords nutrients"
      growth_rate=$(echo "$growth_rate - 2" | bc -l)
-     clamp_growth_rate
+  growth_rate_less_than_0
       growth_today=false
       ;; # End of this case option continues to the next case or exit case block
     "Sunny")
       echo "Its sunny your $plant_name grows alot"
     growth_rate=$(echo "$growth_rate - 2" | bc -l)
-    clamp_growth_rate
+    growth_rate_less_than_0
       growth_today=true
       ;; 
     "Cloudy")
@@ -236,22 +236,20 @@ apply_weather_conditions(){
       echo "A windstorm!!! no growth and $plant_name gets damaged"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
      plant_leaves=$(echo "$plant_leaves - 3" | bc -l)
-     clamp_growth_rate
-     clamp_leaves
+     growth_rate_less_than_0
+     leaves_less_than_0
       ((windstorm_count++))
       growth_today=false
       ;; 
     "Foggy")
       echo "its foggy today no growth for $plant_name"
       growth_rate=$(echo "$growth_rate - 2" | bc -l)
-      clamp_growth_rate
+      growth_rate_less_than_0
       growth_today=false
       ;; 
 
       # End of the case statement
     esac
-
-
   }
 
 sapling_growth_loop(){
@@ -289,7 +287,7 @@ while (($(echo "$plant_height < 35" | bc -l))); do
       if [ "$growth_today" = true ]; then
        plant_height=$(echo "$plant_height + 1.5" | bc -l)
        plant_leaves=$(echo "$plant_leaves + 2 + (2.5 * $growth_rate)" | bc -l)
-       clamp_leaves
+       leaves_less_than_0
        echo "GROWTH TODAY !!! :)"
       echo "Height: ${plant_height}cm"
       echo "Leaves: $plant_leaves"
@@ -342,7 +340,7 @@ prompt_play_again(){
 }
 
   
-  while true; do #loop that runs until the player chooses to stop the game
+while true; do #loop that runs until the player chooses to stop the game
   greet_user #greets user and asks for name
   rename_plant_if_needed #ask if they want to rename their plant if its their 2nd time playing
   prompt_to_plant_seed #asks if they want to plant a seed
